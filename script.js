@@ -12,13 +12,13 @@ let bird = {
     width: 30,
     height: 30,
     gravity: 0.6,
-    lift: -11,
+    lift: -10.5,
     velocity: 0,
 };
 
 let pipes = [];
-let pipeWidth = 60;
-let initialPipeGap = 300; // Khoảng cách giữa các ống ban đầu
+let pipeWidth = 50;
+let initialPipeGap = 400; // Khoảng cách giữa các ống ban đầu
 let pipeGap = initialPipeGap;
 let pipeSpeed = 3;
 let isGameOver = false;
@@ -32,7 +32,7 @@ function initializeGame() {
     bird.y = canvas.height / 2;
     bird.velocity = 0;
     pipes = [];
-    pipeWidth = 60; // Đặt chiều rộng ống về giá trị ban đầu
+    pipeWidth = 50; // Đặt chiều rộng ống về giá trị ban đầu
     pipeGap = initialPipeGap; // Đặt khoảng cách giữa các ống về giá trị ban đầu
     pipeSpeed = getPipeSpeed(DEFAULT_DIFFICULTY);
     isGameOver = false;
@@ -47,13 +47,13 @@ function initializeGame() {
 function getPipeSpeed(difficulty) {
     switch (difficulty) {
         case 'easy':
-            return 3;
+            return 2;
         case 'medium':
-            return 3;
+            return 2;
         case 'hard':
-            return 3;
+            return 2;
         default:
-            return 3; // Độ khó mặc định
+            return 2; // Độ khó mặc định
     }
 }
 
