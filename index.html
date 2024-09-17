@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        #restartButton {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            font-size: 16px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Ẩn nút chơi lại ban đầu */
+        }
+        #startButton {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            font-size: 16px;
+            background-color: #00ff00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #resultMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: black;
+            display: none; /* Ẩn thông báo kết quả ban đầu */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <button id="startButton">Start Game</button>
+    <button id="restartButton">Play Again</button>
+    <div id="resultMessage"></div>
+    <script src="script.js"></script>
+</body>
+</html>
