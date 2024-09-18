@@ -11,24 +11,27 @@ let bird = {
     y: 0,
     width: 30,
     height: 30,
-    gravity: 0.45,
-    lift: -9,
+    gravity: 0.2, // Giảm tốc độ rơi
+    lift: -5, // Giảm lực đẩy
     velocity: 0,
+    isFlapping: false,
 };
 
 let pipes = [];
 let pipeWidth = 50;
-let initialPipeGap = 400; // Khoảng cách giữa các ống ban đầu
+let initialPipeGap = 300; // Khoảng cách giữa các ống ban đầu
 let pipeGap = initialPipeGap;
-let pipeSpeed = 3;
+let pipeSpeed = 2; // Giảm tốc độ di chuyển của ống
 let isGameOver = false;
 let score = 0;
 let highScore = 0;
 let pipeGapReductionRate = 0.09; // Tốc độ giảm khoảng cách giữa các ống
+let initialFlapDelay = 1000; // Thời gian delay ban đầu (1 giây)
+let countdownTime = 3; // Thời gian đếm ngược trước khi bắt đầu
 
 function initializeGame() {
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight * 0.8; // Chiếm 80% chiều cao màn hình
+    canvas.height = Math.min(window.innerHeight * 0.8, 500); // Chiều cao tối đa 500px
     bird.y = canvas.height / 2;
     bird.velocity = 0;
     pipes = [];
@@ -40,18 +43,40 @@ function initializeGame() {
     resultMessage.style.display = 'none';
     restartButton.style.display = 'none'; // Ẩn nút Restart khi trò chơi bắt đầu
     startButton.style.display = 'none'; // Ẩn nút Start khi trò chơi bắt đầu
-    spawnPipe();
-    draw();
+
+    // Delay để chim không rơi trong 1 giây
+    setTimeout(() => {
+        spawnPipe();
+        draw();
+    }, initialFlapDelay);
+}
+
+function startCountdown() {
+    let countdown = countdownTime;
+
+    const countdownInterval = setInterval(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'black';
+        ctx.font = '48px Arial';
+        ctx.fillText(countdown, canvas.width / 2 - 20, canvas.height / 2);
+        countdown--;
+
+        if (countdown < 0) {
+            clearInterval(countdownInterval);
+            initializeGame(); // Bắt đầu trò chơi sau khi đếm ngược xong
+            canvas.addEventListener('click', handleClick);
+        }
+    }, 1000);
 }
 
 function getPipeSpeed(difficulty) {
     switch (difficulty) {
         case 'easy':
-            return 2;
+            return 1.5; // Giảm tốc độ ở độ khó dễ
         case 'medium':
-            return 2;
+            return 2; // Độ khó trung bình
         case 'hard':
-            return 2;
+            return 2.5; // Tăng tốc độ ở độ khó khó
         default:
             return 2; // Độ khó mặc định
     }
@@ -96,7 +121,9 @@ function draw() {
 }
 
 function updateBird() {
-    bird.velocity += bird.gravity;
+    if (!bird.isFlapping) {
+        bird.velocity += bird.gravity; // Tính toán tốc độ rơi
+    }
     bird.y += bird.velocity;
 
     if (bird.y < 0) bird.y = 0;
@@ -146,7 +173,11 @@ function spawnPipe() {
 
 function handleClick() {
     if (!isGameOver) {
-        bird.velocity = bird.lift;
+        bird.isFlapping = true; // Đánh dấu chim đang bay lên
+        bird.velocity = bird.lift; // Đặt tốc độ lên
+        setTimeout(() => {
+            bird.isFlapping = false; // Đặt lại trạng thái bay sau 1 khoảng thời gian ngắn
+        }, 100);
     } else {
         initializeGame();
     }
@@ -154,8 +185,7 @@ function handleClick() {
 
 function startGame() {
     startButton.style.display = 'none'; // Ẩn nút Start khi trò chơi bắt đầu
-    initializeGame();
-    canvas.addEventListener('click', handleClick);
+    startCountdown(); // Bắt đầu bộ đếm giờ
 }
 
 function restartGame() {
