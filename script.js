@@ -12,7 +12,7 @@ let bird = {
     width: 30,
     height: 30,
     gravity: 0.45,
-    lift: -9.8,
+    lift: -9,
     velocity: 0,
 };
 
@@ -28,7 +28,7 @@ let pipeGapReductionRate = 0.09; // Tốc độ giảm khoảng cách giữa cá
 
 function initializeGame() {
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight * 0.8; // Chiếm 80% chiều cao màn hình
     bird.y = canvas.height / 2;
     bird.velocity = 0;
     pipes = [];
@@ -84,7 +84,7 @@ function draw() {
     // Draw the score
     ctx.fillStyle = 'black';
     ctx.font = '24px Arial';
-    ctx.fillText(`Score: ${score}`, 500, 30); // Hiển thị số điểm ở góc trên bên trái
+    ctx.fillText(`Score: ${score}`, 20, 30); // Hiển thị số điểm ở góc trên bên trái
 
     // Update positions
     updateBird();
@@ -127,7 +127,8 @@ function updatePipes() {
         score++;
     }
 
-    if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
+    // Giảm tần suất xuất hiện ống
+    if (pipes.length === 0 || (pipes[pipes.length - 1].x < canvas.width - 200 && Math.random() < 0.01)) {
         spawnPipe();
     }
 
